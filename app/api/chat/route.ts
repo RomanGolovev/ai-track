@@ -8,7 +8,7 @@ export async function POST(req:Request){
  try{
  const {message,mode,now,timezone}=await req.json();if(typeof message!=='string'||!message.trim()||message.length>8000)return Response.json({error:'Введите сообщение до 8000 символов'},{status:400});
  const {data,revision}=read();
- const context={now,timezone,mode,settings:data.settings,tasks:data.tasks,events:data.events,entries:data.entries.slice(-30)};
+ const context={now,timezone,mode,settings:data.settings,tasks:data.tasks,events:data.events,entries:data.entries.slice(-30),weekPlans:(data.weekPlans||[]).slice(-4)};
  const answer=await askOllama([{role:'system',content:SYSTEM_PROMPT},{role:'user',content:'Актуальный контекст из базы: '+JSON.stringify(context)},...data.messages.slice(-20).map(m=>({role:m.role,content:m.content})),{role:'user',content:message}]);
  const messages=[...data.messages,{id:crypto.randomUUID(),role:'user' as const,content:message,date:new Date().toISOString()},{id:crypto.randomUUID(),role:'assistant' as const,content:answer,date:new Date().toISOString()}];
  if(!write({...data,messages},revision))return Response.json({error:'Данные изменились во время ответа. Повторите запрос.'},{status:409});
