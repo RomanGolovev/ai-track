@@ -8,7 +8,8 @@
     "start": "next start --hostname 0.0.0.0",
     "typecheck": "tsc --noEmit",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
-    "test:week-flow": "node --experimental-strip-types tests/week-flow.mjs"
+    "test:week-flow": "node --experimental-strip-types tests/week-flow.mjs",
+    "test:chat-flow": "node --experimental-strip-types tests/chat-flow.mjs"
   },
   "dependencies": {
     "lucide-react": "1.59.0",
